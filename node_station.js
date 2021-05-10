@@ -33,9 +33,7 @@ async function listDatabases(client){
 async function v0(){
     const mongoName = "meteo"                   //Nom de la base
     const mongoUri = 'mongodb+srv://dbUser:dbPassword@cluster0.xoie6.mongodb.net/meteo?retryWrites=true&w=majority'; //URL de connection		
-    //const uri = 'mongodb://10.9.128.189:27017/'; //URL de connection		
-    //const uri = 'mongodb+srv://menez:mettrelevotre@cluster0-x0zyf.mongodb.net/test?retryWrites=true&w=majority';
-    
+
     //Now that we have our URI, we can create an instance of MongoClient.
     const mg_client = new MongoClient(mongoUri,
 				      {useNewUrlParser:true, useUnifiedTopology:true});
@@ -115,11 +113,12 @@ async function v0(){
 	    var key = path.parse(topic.toString()).base;
 	    // Stocker le dictionnaire qui vient d'etre créé dans la BD
 	    // en utilisant le nom du topic comme key de collection
-	    dbo.collection(key).insertOne(new_entry, function(err, res) {
-		if (err) throw err;
-
+		dbo.collection(key).insertOne(new_entry, function(err, res) {
+			if (err) throw err;
+			console.log("\nItem : ", new_entry,
+				"\ninserted in db in collection :", key);
+		});
 	}) // end of 'message' callback installation
-
 	//================================================================
 	// Fermeture de la connexion avec la DB lorsque le NodeJS se termine.
 	//
