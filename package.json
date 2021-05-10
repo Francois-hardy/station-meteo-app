@@ -1,0 +1,28 @@
+{
+ "engines": {
+  "node": "15.8.0"
+ },
+ "name": "espforcloud",
+ "version": "1.0.0",
+ "description": "",
+ "main": "node_lucioles_v4.js",
+ "scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "start": "node_lucioles_v4.js"
+ },
+ "repository": {
+  "type": "git",
+  "url": "git+https://github.com/Francois-hardy/EFC.git"
+ },
+ "author": "",
+ "license": "ISC",
+ "bugs": {
+  "url": "https://github.com/Francois-hardy/EFC/issues"
+ },
+ "homepage": "https://github.com/Francois-hardy/EFC#readme",
+ "dependencies": {
+  "express": "^4.17.1",
+  "mongodb": "^3.6.5",
+  "mqtt": "^4.2.6"
+ }
+}
