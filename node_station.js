@@ -7,8 +7,7 @@ var path = require('path');
 //--- MQTT module
 const mqtt = require('mqtt')
 // Topics MQTT
-const TOPIC_LIGHT = 'sensors/light'
-const TOPIC_TEMP  = 'sensors/temp'
+const TOPIC_MESURE = 'sensors/mesure'
 
 //---  The MongoDB module exports MongoClient, and that's what
 // we'll use to connect to a MongoDB database.
@@ -73,7 +72,6 @@ async function v0(){
 	//===============================================
 	// Connexion au broker MQTT distant
 	//
-	//const mqtt_url = 'http://192.168.1.11:1883'
 	const mqtt_url = 'http://broker.hivemq.com'
 	var client_mqtt = mqtt.connect(mqtt_url);
 	
@@ -81,16 +79,9 @@ async function v0(){
 	// Des la connexion, le serveur NodeJS s'abonne aux topics MQTT 
 	//
 	client_mqtt.on('connect', function () {
-	    client_mqtt.subscribe(TOPIC_LIGHT, function (err) {
+	    client_mqtt.subscribe(TOPIC_MESURE, function (err) {
 		if (!err) {
-		    //client_mqtt.publish(TOPIC_LIGHT, 'Hello mqtt')
-		    console.log('Node Server has subscribed to ', TOPIC_LIGHT);
-		}
-	    })
-	    client_mqtt.subscribe(TOPIC_TEMP, function (err) {
-		if (!err) {
-		    //client_mqtt.publish(TOPIC_TEMP, 'Hello mqtt')
-		    console.log('Node Server has subscribed to ', TOPIC_TEMP);
+		    console.log('Node Server has subscribed to ', TOPIC_MESURE);
 		}
 	    })
 	})
@@ -98,16 +89,13 @@ async function v0(){
 	//================================================================
 	// Callback de la reception des messages MQTT pour les topics sur
 	// lesquels on s'est inscrit.
-	// => C'est cette fonction qui alimente la BD !
-	//
 	client_mqtt.on('message', function (topic, message) {
-	    console.log("\nMQTT msg on topic : ", topic.toString());
-	    console.log("Msg payload : ", message.toString());
 
 	    // Parsing du message supposé recu au format JSON
 	    message = JSON.parse(message);
 	    wh = message.who
-	    val = message.value
+	    temp = message.temp
+		light = message.light
 
 	    // Debug : Gerer une liste de who pour savoir qui utilise le node server	
 	    let wholist = []
@@ -115,18 +103,12 @@ async function v0(){
 	    if (index === -1){
 		wholist.push({who:wh});	    
 	    }
-	    console.log("wholist using the node server :", wholist);
 
-	    // Mise en forme de la donnee à stocker => dictionnaire
-	    // Le format de la date est iomportant => compatible avec le
-	    // parsing qui sera realise par hightcharts dans l'UI
-	    // cf https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_tolocalestring_date_all
-	    // vs https://jsfiddle.net/BlackLabel/tgahn7yv
-	    // var frTime = new Date().toLocaleString("fr-FR", {timeZone: "Europe/Paris"});
 	    var frTime = new Date().toLocaleString("sv-SE", {timeZone: "Europe/Paris"});
 	    var new_entry = { date: frTime, // timestamp the value 
 			      who: wh,      // identify ESP who provide 
-			      value: val    // this value
+			      temp: val,    // this value
+				  light: val    // this value
 			    };
 	    
 	    // On recupere le nom basique du topic du message
@@ -135,16 +117,7 @@ async function v0(){
 	    // en utilisant le nom du topic comme key de collection
 	    dbo.collection(key).insertOne(new_entry, function(err, res) {
 		if (err) throw err;
-		console.log("\nItem : ", new_entry, 
-		"\ninserted in db in collection :", key);
-	    });
 
-	    // Debug : voir les collections de la DB 
-	    //dbo.listCollections().toArray(function(err, collInfos) {
-		// collInfos is an array of collection info objects
-		// that look like: { name: 'test', options: {} }
-	    //	console.log("List of collections currently in DB: ", collInfos); 
-	    //});
 	}) // end of 'message' callback installation
 
 	//================================================================
