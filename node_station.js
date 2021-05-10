@@ -51,19 +51,11 @@ async function v0(){
 	dbo = mg_client.db(mongoName);
 
 	// Remove "old collections : temp and light
-	dbo.listCollections({name: "mesure/light"})
+	dbo.listCollections({name: "mesure"})
 	    .next(function(err, collinfo) {
 		if (collinfo) { // The collection exists
 		    //console.log('Collection temp already exists');
-		    dbo.collection("temp").drop() 
-		}
-	    });
-
-	dbo.listCollections({name: "mesure/temp"})
-	    .next(function(err, collinfo) {
-		if (collinfo) { // The collection exists
-		    //console.log('Collection temp already exists');
-		    dbo.collection("light").drop() 
+		    dbo.collection("mesure").drop()
 		}
 	    });
 
@@ -105,8 +97,8 @@ async function v0(){
 	    var frTime = new Date().toLocaleString("sv-SE", {timeZone: "Europe/Paris"});
 	    var new_entry = { date: frTime, // timestamp the value 
 			      who: wh,      // identify ESP who provide 
-			      temp: val,    // this value
-				  light: val    // this value
+			      temp: temp,    // this value
+				  light: light    // this value
 			    };
 	    
 	    // On recupere le nom basique du topic du message
