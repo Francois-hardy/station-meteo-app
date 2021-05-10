@@ -86,6 +86,7 @@ async function v0(){
 	    wh = message.who
 	    temp = message.temp
 		light = message.light
+		id_station = "60983c81dfc683ad8f3e9275"
 
 	    // Debug : Gerer une liste de who pour savoir qui utilise le node server	
 	    let wholist = []
@@ -98,7 +99,8 @@ async function v0(){
 	    var new_entry = { date: frTime, // timestamp the value 
 			      who: wh,      // identify ESP who provide 
 			      temp: temp,    // this value
-				  light: light    // this value
+				  light: light,   // this value
+			      id_station: id_station
 			    };
 	    
 	    // On recupere le nom basique du topic du message
