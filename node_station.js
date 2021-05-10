@@ -32,8 +32,8 @@ async function listDatabases(client){
 // MongoDB cluster, call functions that query our database, and
 // disconnect from our cluster.
 async function v0(){
-    const mongoName = "lucioles"                   //Nom de la base
-    const mongoUri = 'mongodb+srv://dbUser:EtzfT3e3jwiT1k7L@cluster0.n2emf.mongodb.net/lucioles?retryWrites=true&w=majority'; //URL de connection		
+    const mongoName = "meteo"                   //Nom de la base
+    const mongoUri = 'mongodb+srv://dbUser:dbPassword@cluster0.xoie6.mongodb.net/meteo?retryWrites=true&w=majority'; //URL de connection		
     //const uri = 'mongodb://10.9.128.189:27017/'; //URL de connection		
     //const uri = 'mongodb+srv://menez:mettrelevotre@cluster0-x0zyf.mongodb.net/test?retryWrites=true&w=majority';
     
@@ -54,7 +54,7 @@ async function v0(){
 	dbo = mg_client.db(mongoName);
 
 	// Remove "old collections : temp and light
-	dbo.listCollections({name: "temp"})
+	dbo.listCollections({name: "mesure/light"})
 	    .next(function(err, collinfo) {
 		if (collinfo) { // The collection exists
 		    //console.log('Collection temp already exists');
@@ -62,7 +62,7 @@ async function v0(){
 		}
 	    });
 
-	dbo.listCollections({name: "light"})
+	dbo.listCollections({name: "mesure/temp"})
 	    .next(function(err, collinfo) {
 		if (collinfo) { // The collection exists
 		    //console.log('Collection temp already exists');
@@ -193,10 +193,6 @@ app.use(function(request, response, next) { //Pour eviter les problemes de CORS/
 //================================================================
     
 // Route / => Le node renvoie la page HTML affichant les charts
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/ui_lucioles.html'));
-});
-
 
 // The request contains the name of the targeted ESP !
 //     /esp/temp?who=80%3A7D%3A3A%3AFD%3AC9%3A44
