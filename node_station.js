@@ -86,11 +86,12 @@ async function v0(){
 	    wh = message.who
 	    temp = message.temp
 		light = message.light
-		id_station = "6099563a3a3c000013003be5"//"60983c81dfc683ad8f3e9275"
+		id_station = message.id
+		//id_station = "6099563a3a3c000013003be5"
 
 	    // Debug : Gerer une liste de who pour savoir qui utilise le node server	
 	    let wholist = []
-	    var index = wholist.findIndex(x => x.who==wh)
+	    var index = wholist.findIndex(x => x.who===wh)
 	    if (index === -1){
 		wholist.push({who:wh});	    
 	    }
