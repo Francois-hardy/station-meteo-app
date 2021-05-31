@@ -86,7 +86,7 @@ async function v0(){
 	    wh = message.who
 	    temp = message.temp
 		light = message.light
-		id_station = "6098f41d3a3c000013003be1"//"60983c81dfc683ad8f3e9275"
+		id_station = "6098f5863a3c000013003be2"//"60983c81dfc683ad8f3e9275"
 
 	    // Debug : Gerer une liste de who pour savoir qui utilise le node server	
 	    let wholist = []
